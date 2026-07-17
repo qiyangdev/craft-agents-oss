@@ -319,7 +319,7 @@ export interface TurnCardProps {
   /** Callback when URL is clicked */
   onOpenUrl?: (url: string) => void
   /** Callback to open response in Monaco editor */
-  onPopOut?: (text: string) => void
+  onPopOut?: (text: string, messageId?: string) => void
   /** Callback to open turn details in a new window */
   onOpenDetails?: () => void
   /** Callback to open individual activity details in Monaco */
@@ -3141,7 +3141,7 @@ export const TurnCard = React.memo(function TurnCard({
             sessionId={sessionId}
             onOpenFile={onOpenFile}
             onOpenUrl={onOpenUrl}
-            onPopOut={onPopOut ? () => onPopOut(planActivity.content || '') : undefined}
+            onPopOut={onPopOut ? () => onPopOut(planActivity.content || '', planActivity.messageId) : undefined}
             variant="plan"
             messageId={planActivity.messageId}
             annotations={planActivity.annotations}

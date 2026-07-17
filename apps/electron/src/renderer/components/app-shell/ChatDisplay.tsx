@@ -106,6 +106,7 @@ interface MarkdownOverlayState {
   type: 'markdown'
   content: string
   title: string
+  filePath?: string
   /** When true, show raw markdown source in code viewer instead of rendered preview */
   forceCodeView?: boolean
 }
@@ -1827,12 +1828,14 @@ export const ChatDisplay = React.forwardRef<ChatDisplayHandle, ChatDisplayProps>
                             },
                           }))
                         }}
-                        onPopOut={(text) => {
+                        onPopOut={(text, messageId) => {
+                          const filePath = session?.messages.find(message => message.id === messageId)?.planPath
                           // Open raw markdown source in code viewer
                           setOverlayState({
                             type: 'markdown',
                             content: text,
                             title: 'Response Preview',
+                            filePath,
                             forceCodeView: true,
                           })
                         }}
@@ -2092,7 +2095,8 @@ export const ChatDisplay = React.forwardRef<ChatDisplayHandle, ChatDisplayProps>
             isOpen={true}
             onClose={handleCloseOverlay}
             content={overlayState.content}
-            filePath="response.md"
+            filePath={overlayState.filePath}
+            title={overlayState.filePath ? undefined : overlayState.title}
             language="markdown"
             mode="read"
             theme={isDark ? 'dark' : 'light'}
